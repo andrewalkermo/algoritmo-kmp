@@ -1,0 +1,7 @@
+.vscode/*
+.idea/*
+*.dat
+main
+src/main
+*.dat
+teste.*

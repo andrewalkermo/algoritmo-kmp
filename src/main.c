@@ -7,9 +7,9 @@ int main() {
 }
 
 void processa_comandos(No *raiz) {
-  char comando;
-  while (scanf("%s", &comando)) {
-    switch (comando) {
+  char *comando = (char *)malloc(2 * sizeof(char));
+  while (scanf("%s", comando)) {
+    switch (comando[0]) {
       case INSERE_REGISTRO:
         processa_comando_insere_registro(raiz);
         break;

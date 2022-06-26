@@ -10,7 +10,7 @@
 #include "consultas/consultas.h"
 #include "operacoes_arquivo/operacoes_arquivo.h"
 #include "utils/utils.h"
-
+#include "kmp/kmp.h"
 void processa_comandos(No *raiz);
 void processa_comando_insere_registro(No *raiz);
 void processa_comando_consulta_simples(No *raiz);
@@ -19,6 +19,7 @@ void processa_comando_consulta_por_faixa_de_anos(No *raiz);
 void processa_comando_consulta_por_faixa_de_nomes_de_autores_e_anos(No *raiz);
 void processa_comando_imprime_indice_da_arvore(No *raiz);
 void processa_comando_imprime_pagina(No *raiz);
+void processa_comando_tabela_pi(No *raiz);
 void adiciona_indices_das_paginas_na_arvore(No *no, int *indice);
 void imprime_registros_da_pagina(int indicePagina, Consulta *consulta);
 void imprime_registros_que_correspondem_a_consulta(No *no, Consulta *consulta);

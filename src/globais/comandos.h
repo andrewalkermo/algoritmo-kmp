@@ -8,3 +8,4 @@
 #define IMPRIME_INDICE_DA_ARVORE 't'
 #define IMPRIME_PAGINA 'p'
 #define TERMINO_DA_SEQUENCIA_DE_COMANDOS 'e'
+#define TABELA_PI 'm'

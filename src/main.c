@@ -8,7 +8,7 @@ int main() {
 
 void processa_comandos(No *raiz) {
   char comando;
-  while (scanf("%c", &comando)) {
+  while (scanf("%s", &comando)) {
     switch (comando) {
       case INSERE_REGISTRO:
         processa_comando_insere_registro(raiz);
@@ -31,8 +31,15 @@ void processa_comandos(No *raiz) {
       case IMPRIME_PAGINA:
         processa_comando_imprime_pagina(raiz);
         break;
+      case TABELA_PI:
+        processa_comando_tabela_pi(raiz);
+        break;
       case TERMINO_DA_SEQUENCIA_DE_COMANDOS:
         return;
+      default:
+        printf("LOG - Comando inválido\n");
+        break;
+
     }
   }
 }
@@ -228,6 +235,19 @@ void processa_comando_imprime_pagina(No *raiz) {
     indicePagina = pagina.proxima;
   } while (pagina.proxima != -1);
   fclose(arquivo);
+}
+
+void processa_comando_tabela_pi(No *raiz) {
+
+  char palavra[TAMANHO_PALAVRA];
+  scanf("%s", palavra);
+  int *tabela_pi;
+
+  tabela_pi = cria_tabela_pi_de_palavra(palavra);
+  printf("tabela pi para a palavra: %s:\n", palavra);
+  for (int i = 0; i < strlen(palavra); i++) {
+    printf("'%c': %d\n", palavra[i], tabela_pi[i]);
+  }
 }
 
 // le o conteudo da pagina no arquivo e compara a obra com os valores da consulta

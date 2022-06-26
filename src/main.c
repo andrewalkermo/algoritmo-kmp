@@ -244,9 +244,10 @@ void processa_comando_imprime_pagina(No *raiz) {
 }
 
 void processa_comando_arquivos_em_que_uma_palavra_ocorre() {
+  // faz a leitura da palavra
   char palavra[TAMANHO_PALAVRA];
   scanf("%s", palavra);
-
+  // abre o arquivo e faz a leitura do cabecalho e da quantidade de registros
   FILE *arquivo = abre_arquivo(NOME_ARQUIVO, "r");
   CabecalhoArquivo cabecalhoArquivo = le_cabecalho_do_arquivo(arquivo);
   Pagina pagina;
@@ -255,8 +256,11 @@ void processa_comando_arquivos_em_que_uma_palavra_ocorre() {
 
   for (int i = 0; i < qtdPaginas; i++) {
     int indicePagina = i;
+    // faz a leitura de cada registro da pagina
+    // verifica se o aruivo do livro da obra contem a palavra e imprime a palavra e os dados da obra, caso nao tenha, imprime que nao ha ocorrencia
     do {
       pagina = le_pagina_do_arquivo(arquivo, indicePagina);
+    // loop para ler todos as obras da pagina
       for (int j = 0; j < NREGSPORPAGINA; j++) {
         if (pagina.registros[j].ocupado && arquivo_contem_palavra(pagina.registros[j].obra.arquivo, palavra)) {
           encontrou = true;
@@ -279,10 +283,11 @@ void processa_comando_consulta_de_palavra(No *raiz) {
   Consulta consulta;
   consulta.qtdResultados = 0;
   consulta.tipo = CONSULTA_DE_PALAVRA;
-
+  // faz a leitura da palavra e dos dados da obra
   scanf("%s", consulta.palavra);
   le_entrada_com_espacos(consulta.nomeInicial);
   le_entrada_com_espacos(consulta.tituloObra);
+  // caso tenha algum registro que corresponda aos dados da obra, imprime os dados da obra
   imprime_registros_que_correspondem_a_consulta(raiz, &consulta);
   if (consulta.qtdResultados == 0) {
     printf("obra inexistente: titulo: %s - autor: %s\n", consulta.tituloObra, consulta.nomeInicial);

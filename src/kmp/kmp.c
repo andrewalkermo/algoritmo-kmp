@@ -69,7 +69,6 @@ void compara_caractere_com_palavra(char caractere, const char *palavra, const in
   else if (*indicePalavra > 0) {
     *indicePalavra = tabelaPi[*indicePalavra - 1] + 1;
     compara_caractere_com_palavra(caractere, palavra, tabelaPi, indicePalavra);
-  } else {
   }
 }
 

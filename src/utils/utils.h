@@ -14,4 +14,4 @@ Pagina cria_pagina_vazia();
 Registro cria_registro_vazio();
 
 Obra *le_obra_da_entrada();
-char *le_nome_da_entrada();
+void le_entrada_com_espacos(char *entrada);

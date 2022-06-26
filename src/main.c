@@ -32,7 +32,10 @@ void processa_comandos(No *raiz) {
         processa_comando_imprime_pagina(raiz);
         break;
       case ARQUIVOS_EM_QUE_UMA_PALAVRA_OCORRE:
-        processa_comando_arquivos_em_que_uma_palavra_ocorre(raiz);
+        processa_comando_arquivos_em_que_uma_palavra_ocorre();
+        break;
+      case CONSULTA_DE_PALAVRA:
+        processa_comando_consulta_de_palavra(raiz);
         break;
       case TABELA_PI:
         processa_comando_tabela_pi(raiz);
@@ -155,7 +158,7 @@ void processa_comando_insere_registro(No *raiz) {
 // imprime os registros encontrados e caso nao tenha nenhum registro encontrado, imprime mensagem de nao encontrado 
 void processa_comando_consulta_simples(No *raiz) {
   Consulta consulta;
-  strcpy(consulta.nomeInicial, le_nome_da_entrada());
+  le_entrada_com_espacos(consulta.nomeInicial);
   consulta.qtdResultados = 0;
   consulta.tipo = CONSULTA_SIMPLES;
 
@@ -169,8 +172,8 @@ void processa_comando_consulta_simples(No *raiz) {
 // imprime os registros encontrados e caso nao tenha nenhum registro encontrado, imprime mensagem de nao encontrado 
 void processa_comando_consulta_por_faixa_de_nomes_de_autores(No *raiz) {
   Consulta consulta;
-  strcpy(consulta.nomeInicial, le_nome_da_entrada());
-  strcpy(consulta.nomeFinal, le_nome_da_entrada());
+  le_entrada_com_espacos(consulta.nomeInicial);
+  le_entrada_com_espacos(consulta.nomeFinal);
   consulta.qtdResultados = 0;
   consulta.tipo = CONSULTA_POR_FAIXA_DE_NOMES_DE_AUTORES;
 
@@ -199,8 +202,8 @@ void processa_comando_consulta_por_faixa_de_anos(No *raiz) {
 // imprime os registros encontrados e caso nao tenha nenhum registro encontrado, imprime mensagem de nao encontrado 
 void processa_comando_consulta_por_faixa_de_nomes_de_autores_e_anos(No *raiz) {
   Consulta consulta;
-  strcpy(consulta.nomeInicial, le_nome_da_entrada());
-  strcpy(consulta.nomeFinal, le_nome_da_entrada());
+  le_entrada_com_espacos(consulta.nomeInicial);
+  le_entrada_com_espacos(consulta.nomeFinal);
   scanf("%u", &consulta.anoInicial);
   scanf("%u", &consulta.anoFinal);
   consulta.qtdResultados = 0;
@@ -240,7 +243,7 @@ void processa_comando_imprime_pagina(No *raiz) {
   fclose(arquivo);
 }
 
-void processa_comando_arquivos_em_que_uma_palavra_ocorre(No *raiz) {
+void processa_comando_arquivos_em_que_uma_palavra_ocorre() {
   char palavra[TAMANHO_PALAVRA];
   scanf("%s", palavra);
 
@@ -272,6 +275,20 @@ void processa_comando_arquivos_em_que_uma_palavra_ocorre(No *raiz) {
   fclose(arquivo);
 }
 
+void processa_comando_consulta_de_palavra(No *raiz) {
+  Consulta consulta;
+  consulta.qtdResultados = 0;
+  consulta.tipo = CONSULTA_DE_PALAVRA;
+
+  scanf("%s", consulta.palavra);
+  le_entrada_com_espacos(consulta.nomeInicial);
+  le_entrada_com_espacos(consulta.tituloObra);
+  imprime_registros_que_correspondem_a_consulta(raiz, &consulta);
+  if (consulta.qtdResultados == 0) {
+    printf("obra inexistente: titulo: %s - autor: %s\n", consulta.tituloObra, consulta.nomeInicial);
+  }
+}
+
 void processa_comando_tabela_pi(No *raiz) {
 
   char palavra[TAMANHO_PALAVRA];
@@ -296,13 +313,18 @@ void imprime_registros_da_pagina(int indicePagina, Consulta *consulta) {
     for (int j = 0; j < NREGSPORPAGINA; j++) {
       if (pagina.registros[j].ocupado && compara_obra_com_consulta(&pagina.registros[j].obra, consulta)) {
         (*consulta).qtdResultados++;
-        if (consulta->tipo == CONSULTA_SIMPLES) {
+
+        if (consulta->tipo == CONSULTA_DE_PALAVRA) {
+            imprime_ocorrencia_da_palavra_na_obra(&(pagina.registros[j].obra), consulta->palavra);
+        } else {
+          if (consulta->tipo == CONSULTA_SIMPLES) {
             printf("nome: ");
+          }
+          printf("%s\n", pagina.registros[j].obra.autor);
+          printf("%s\n", pagina.registros[j].obra.nome);
+          printf("%u\n", pagina.registros[j].obra.ano);
+          printf("%s\n", pagina.registros[j].obra.arquivo);
         }
-        printf("%s\n", pagina.registros[j].obra.autor);
-        printf("%s\n", pagina.registros[j].obra.nome);
-        printf("%u\n", pagina.registros[j].obra.ano);
-        printf("%s\n", pagina.registros[j].obra.arquivo);
       }
     }
     indicePagina = pagina.proxima;

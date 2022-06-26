@@ -6,7 +6,7 @@
 // 1 deve ir para o no direito
 int compara_no_com_consulta(No *no, Consulta *consulta) {
     if (no->tipo == TIPO_NO_AUTOR) {
-        if (consulta->tipo == CONSULTA_SIMPLES) {
+        if (consulta->tipo == CONSULTA_SIMPLES || consulta->tipo == CONSULTA_DE_PALAVRA) {
             if (strcmp(consulta->nomeInicial, no->autor) <= 0) {
                 return -1;
             }
@@ -30,7 +30,7 @@ int compara_no_com_consulta(No *no, Consulta *consulta) {
         }
     }
     else {
-        if (consulta->tipo == CONSULTA_SIMPLES || consulta->tipo == CONSULTA_POR_FAIXA_DE_NOMES_DE_AUTORES) {
+        if (consulta->tipo == CONSULTA_SIMPLES || consulta->tipo == CONSULTA_POR_FAIXA_DE_NOMES_DE_AUTORES || consulta->tipo == CONSULTA_DE_PALAVRA) {
             return 0;
         }
         else if (consulta->tipo == CONSULTA_POR_FAIXA_DE_ANOS || consulta->tipo == CONSULTA_POR_FAIXA_DE_NOMES_DE_AUTORES_E_ANOS) {
@@ -62,6 +62,11 @@ bool compara_obra_com_consulta(Obra *obra, Consulta *consulta) {
             (
                     consulta->tipo == CONSULTA_SIMPLES
                     && strcmp(obra->autor, consulta->nomeInicial) == 0
+            )
+            || (
+                    consulta->tipo == CONSULTA_DE_PALAVRA
+                    && strcmp(obra->autor, consulta->nomeInicial) == 0
+                    && strcmp(obra->nome, consulta->tituloObra) == 0
             )
             || (
                     consulta->tipo == CONSULTA_POR_FAIXA_DE_NOMES_DE_AUTORES

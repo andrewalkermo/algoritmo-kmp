@@ -62,3 +62,31 @@ void compara_caractere_com_palavra(char caractere, const char *palavra, const in
 //    printf("LOG: Caractere %c não corresponde a palavra %s - indice: %d\n", caractere, palavra, *indicePalavra);
   }
 }
+
+void imprime_ocorrencia_da_palavra_na_obra(Obra *obra, char *palavra) {
+  FILE *arquivo = abre_arquivo(obra->arquivo, "r");
+
+  char caractere;
+  int *tabelaPi = cria_tabela_pi_de_palavra(palavra);
+
+  int indicePalavra = 0;
+  int linha = 1;
+  int posicao = 0;
+
+  printf("ocorrencia(s) da palavra: %s:\n", palavra);
+  while ((caractere = (char) fgetc(arquivo)) != EOF) {
+    if (caractere == '\n') {
+      linha++;
+      posicao = 0;
+      indicePalavra = 0;
+    }
+    else {
+      posicao++;
+    }
+    compara_caractere_com_palavra(caractere, palavra, tabelaPi, &indicePalavra);
+    if (indicePalavra == strlen(palavra)) {
+      printf("linha: %d posicao: %lu\n", linha, (posicao - strlen(palavra) + 1));
+      indicePalavra = tabelaPi[indicePalavra - 1] + 1;
+    }
+  }
+}

@@ -9,7 +9,6 @@ FILE *abre_arquivo(char *nomeArquivo, char *modo){
   return arquivo;
 }
 
-
 CabecalhoArquivo le_cabecalho_do_arquivo(FILE *arquivo) {
   CabecalhoArquivo cabecalhoArquivo;
   fseek(arquivo, 0, SEEK_SET);

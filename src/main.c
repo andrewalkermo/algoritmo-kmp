@@ -31,6 +31,9 @@ void processa_comandos(No *raiz) {
       case IMPRIME_PAGINA:
         processa_comando_imprime_pagina(raiz);
         break;
+      case ARQUIVOS_EM_QUE_UMA_PALAVRA_OCORRE:
+        processa_comando_arquivos_em_que_uma_palavra_ocorre(raiz);
+        break;
       case TABELA_PI:
         processa_comando_tabela_pi(raiz);
         break;
@@ -237,6 +240,38 @@ void processa_comando_imprime_pagina(No *raiz) {
   fclose(arquivo);
 }
 
+void processa_comando_arquivos_em_que_uma_palavra_ocorre(No *raiz) {
+  char palavra[TAMANHO_PALAVRA];
+  scanf("%s", palavra);
+
+  FILE *arquivo = abre_arquivo(NOME_ARQUIVO, "r");
+  CabecalhoArquivo cabecalhoArquivo = le_cabecalho_do_arquivo(arquivo);
+  Pagina pagina;
+  unsigned int qtdPaginas = cabecalhoArquivo.qtdNos + 1;
+  bool encontrou = false;
+
+  for (int i = 0; i < qtdPaginas; i++) {
+    int indicePagina = i;
+    do {
+      pagina = le_pagina_do_arquivo(arquivo, indicePagina);
+      for (int j = 0; j < NREGSPORPAGINA; j++) {
+        if (pagina.registros[j].ocupado && arquivo_contem_palavra(pagina.registros[j].obra.arquivo, palavra)) {
+          encontrou = true;
+          printf("palavra: %s\n", palavra);
+          printf("titulo: %s\n", pagina.registros[j].obra.nome);
+          printf("autor: %s\n", pagina.registros[j].obra.autor);
+          printf("ano: %u\n", pagina.registros[j].obra.ano);
+        }
+      }
+      indicePagina = pagina.proxima;
+    } while (pagina.proxima != -1);
+  }
+  if (!encontrou) {
+    printf("nao ha ocorrencia da palavra: %s\n", palavra);
+  }
+  fclose(arquivo);
+}
+
 void processa_comando_tabela_pi(No *raiz) {
 
   char palavra[TAMANHO_PALAVRA];
@@ -246,7 +281,7 @@ void processa_comando_tabela_pi(No *raiz) {
   tabela_pi = cria_tabela_pi_de_palavra(palavra);
   printf("tabela pi para a palavra: %s:\n", palavra);
   for (int i = 0; i < strlen(palavra); i++) {
-    printf("'%c': %d\n", palavra[i], tabela_pi[i]);
+    printf("'%c': %d\n", palavra[i], tabela_pi[i] + 1);
   }
 }
 
